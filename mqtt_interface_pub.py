@@ -4,7 +4,7 @@ from socket import gethostname,gethostbyname
 
 # ip取得
 your_ip = gethostbyname(gethostname())
-
+#コメントを追加
 class MQTT_PUB:
     def __init__(self) -> None:
         self.broker = ""
