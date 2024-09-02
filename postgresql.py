@@ -9,9 +9,10 @@ class POSTGRESQL:
         self._db_connection = None
     
 
-    def setting_connection(self,host:str,user:str,database:str):
+    def setting_connection(self,host:str,user:str,password:str,database:str):
         self._host = host
         self._user = user
+        self._password = password
         self._database = database
     
     def connect_DB(self):
