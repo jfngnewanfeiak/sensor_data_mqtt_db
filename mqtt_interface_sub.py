@@ -39,8 +39,8 @@ class MQTT_SUB:
     def __subscribe(self,client:mqtt):
         def __on_message(client,ud,msg):
             print(f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
-            # self.__callback(msg.payload.decode())
-            self.__callback()
+            self.__callback(msg.payload.decode())
+            # self.__callback()
         
         client.subscribe(self.__topic)
         client.on_message = __on_message
