@@ -5,6 +5,12 @@ from socket import gethostname,gethostbyname
 your_ip = gethostbyname(gethostname())
 
 class MQTT_SUB:
+    """
+    Note:
+        使い方
+        0 インスタンス生成
+        1 sub_run()実行。
+    """
     def __init__(self) -> None:
         self.__broker = ""
         self.__port = 1883 #default settings
@@ -19,6 +25,9 @@ class MQTT_SUB:
     
     def topic_setter(self,topic_name:str):
         self.__topic = topic_name
+    
+    def _port_setter(self,port:int):
+        self.__port = port
     
     # ブローカに接続
     def __connect_mqtt(self)->mqtt:
@@ -46,16 +55,29 @@ class MQTT_SUB:
         client.on_message = __on_message
     
         
-    def sub_run(self,broker_ip:str,topic_name:str,cb):
+    def sub_run(self,broker_ip:str,topic_name:str,cb,port=1883):
+        """
+        Args:
+            broker_ip: mqttブローカのipアドレス
+            topic_name: mqtt通信するための自分が決めたトピックの名前
+            cb: データを受け取った後に実行する関数。第一引数に受け取ったデータが入る
+            port: mqtt通信するためのポート番号を指定。デフォルト値は1883。自分でファイヤーウォール設定したやつ
+        Note:
+            topicを受け取るようにするための実行関数
+        """
         # 設定
         self.borker_setter(broker_ip=broker_ip)
         self.topic_setter(topic_name=topic_name)
+        self._port_setter(port=port)
+
 
         client = self.__connect_mqtt()
         self.__subscribe(client=client)
         self.__callback = cb
         # client.loop_start()
         client.loop_forever()
+
+        
     def callback(self):
         print("callback")
 
