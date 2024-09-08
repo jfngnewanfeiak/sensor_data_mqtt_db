@@ -5,6 +5,15 @@ from socket import gethostname,gethostbyname
 your_ip = gethostbyname(gethostname())
 #コメントを追加
 class MQTT_PUB:
+    """
+    Note:
+        使い方
+        0 インスタンス生成
+        1 pub_con()実行
+        2 pubmsg_setter()でmsg変更
+        3 任意のタイミングでpub_run()実行
+        4 2,3を使っていく。
+    """
     def __init__(self) -> None:
         self.broker = ""
         self.port = 1883
@@ -21,6 +30,12 @@ class MQTT_PUB:
         self.topic = topic_name
     
     def pubmsg_setter(self,pubmsg):
+        """
+        Args:
+            pubmsg: publishするデータ(str)
+        Note:
+            publishするデータを設定するための関数
+        """
         self.pubmsg = pubmsg
     
     def __connect_mqtt(self)->mqtt:
@@ -37,7 +52,14 @@ class MQTT_PUB:
         return client
     
     
-    def pub_con(self,broker_ip:str,topic_name:str,pubmsg:str)->mqtt:
+    def pub_con(self,broker_ip:str,topic_name:str,pubmsg:str,port=1883)->mqtt:
+        """
+        Args:
+            broker_ip: mqttブローカのipアドレスもしくはbroker.emqx.io
+            topic_name: mqtt通信用のトピック名
+            pubmsg: publishするメッセージ(str)
+            port: mqtt通信のポート。デフォルト値 1883
+        """
         def __on_connect(client,userdata,flag,rc):
             if rc == 0:
                 print("Connected to Mqtt Broker")
@@ -48,6 +70,7 @@ class MQTT_PUB:
         self.__broker_setter(broker_ip=broker_ip)
         self.__topic_setter(topic_name=topic_name)
         self.pubmsg_setter(pubmsg=pubmsg)
+        self.port = port
         self.client = mqtt.Client()
         self.client.username_pw_set(self.username,self.password)
         self.client.on_connect = __on_connect

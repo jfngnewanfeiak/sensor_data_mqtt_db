@@ -58,7 +58,7 @@ class MQTT_SUB:
     def sub_run(self,broker_ip:str,topic_name:str,cb,port=1883):
         """
         Args:
-            broker_ip: mqttブローカのipアドレス
+            broker_ip: mqttブローカのipアドレスもしくはbroker.emqx.io
             topic_name: mqtt通信するための自分が決めたトピックの名前
             cb: データを受け取った後に実行する関数。第一引数に受け取ったデータが入る
             port: mqtt通信するためのポート番号を指定。デフォルト値は1883。自分でファイヤーウォール設定したやつ
@@ -77,7 +77,7 @@ class MQTT_SUB:
         # client.loop_start()
         client.loop_forever()
 
-        
+
     def callback(self):
         print("callback")
 
